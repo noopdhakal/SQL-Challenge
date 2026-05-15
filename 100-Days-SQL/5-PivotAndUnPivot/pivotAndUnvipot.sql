@@ -8,7 +8,7 @@ pivot (
 )  pivottables;
 
 
-
+-- IMP
 -- pivot
 select *  from emp_compensation;
 select 
