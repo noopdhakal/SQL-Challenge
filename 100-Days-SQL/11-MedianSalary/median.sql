@@ -20,5 +20,5 @@ order by emp_age
 -- # method #2: median using precentile count
 
 select e.*, 
-PERCENTILE_CONT(0.5) within group (order by emp_age) over () as median
+PERCENTILE_CONT(0.5) within group (order by emp_age) over (partition by department_id) as median
 from emp e;
