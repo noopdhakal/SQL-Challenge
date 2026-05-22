@@ -1,0 +1,15 @@
+create table spending 
+(
+user_id int,
+spend_date date,
+platform varchar(10),
+amount int
+);
+
+insert into spending values
+(1, TO_DATE('2019-07-01','YYYY-MM-DD'), 'mobile', 100),
+(1, TO_DATE('2019-07-01','YYYY-MM-DD'), 'desktop', 100),
+(2, TO_DATE('2019-07-01','YYYY-MM-DD'), 'mobile', 100),
+(2, TO_DATE('2019-07-02','YYYY-MM-DD'), 'mobile', 100),
+(3, TO_DATE('2019-07-01','YYYY-MM-DD'), 'desktop', 100),
+(3, TO_DATE('2019-07-02','YYYY-MM-DD'), 'desktop', 100);
