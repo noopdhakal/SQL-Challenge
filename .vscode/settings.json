@@ -4,12 +4,11 @@
             "ssh": "Disabled",
             "previewLimit": 50,
             "server": "localhost",
-            "port": 5432,
-            "askForPassword": true,
+            "port": 5433,
             "driver": "PostgreSQL",
-            "name": "posgres",
-            "username": "admin",
-            "database": "postgres"
+            "name": "100DaysSQL",
+            "database": "100DaysSQL",
+            "username": "postgres"
         }
     ]
 }
