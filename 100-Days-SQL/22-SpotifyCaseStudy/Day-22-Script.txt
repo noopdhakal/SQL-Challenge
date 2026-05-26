@@ -1,0 +1,20 @@
+CREATE table activity
+(
+user_id varchar(20),
+event_name varchar(20),
+event_date date,
+country varchar(20)
+);
+delete from activity;
+INSERT INTO activity VALUES
+(1,'app-installed', TO_DATE('2022-01-01','YYYY-MM-DD'),'India'),
+(1,'app-purchase',  TO_DATE('2022-01-02','YYYY-MM-DD'),'India'),
+(2,'app-installed', TO_DATE('2022-01-01','YYYY-MM-DD'),'USA'),
+(3,'app-installed', TO_DATE('2022-01-01','YYYY-MM-DD'),'USA'),
+(3,'app-purchase',  TO_DATE('2022-01-03','YYYY-MM-DD'),'USA'),
+(4,'app-installed', TO_DATE('2022-01-03','YYYY-MM-DD'),'India'),
+(4,'app-purchase',  TO_DATE('2022-01-03','YYYY-MM-DD'),'India'),
+(5,'app-installed', TO_DATE('2022-01-03','YYYY-MM-DD'),'SL'),
+(5,'app-purchase',  TO_DATE('2022-01-03','YYYY-MM-DD'),'SL'),
+(6,'app-installed', TO_DATE('2022-01-04','YYYY-MM-DD'),'Pakistan'),
+(6,'app-purchase',  TO_DATE('2022-01-04','YYYY-MM-DD'),'Pakistan');
