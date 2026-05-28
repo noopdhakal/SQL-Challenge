@@ -1,0 +1,54 @@
+Problem 1
+
+with avg_cte as (
+    select subject, avg(marks) as avg_marks 
+    from students
+    group by subject
+)
+select 
+    s.*, ac.*
+from students s
+inner join avg_cte ac on s.subject = ac.subject
+where s.marks > ac.avg_marks;
+
+
+Problem 2
+
+select
+    count(distinct case when marks > 90 then studentid else null end) * 1.0 / count(distinct studentid) * 100 as perc
+from students;
+
+
+Problem 3
+
+select 
+    subject,
+    sum(case when rnk_desc = 2 then marks else null end) as second_highest_marks,
+    sum(case when rnk_asc = 2 then marks else null end) as second_lowest_marks
+from
+(
+    select 
+        subject,
+        marks,
+        rank() over(partition by subject order by marks asc) as rnk_asc,
+        rank() over(partition by subject order by marks desc) as rnk_desc
+    from students
+) A
+group by subject;
+
+
+Problem 4
+
+select 
+    *,
+    case 
+        when marks > prev_marks then 'inc'
+        when marks < prev_marks then 'dec'
+        else null 
+    end as statys
+from (
+    select 
+        *,
+        lag(marks,1) over(partition by studentid order by testdate, subject) as prev_marks
+    from students
+) A;

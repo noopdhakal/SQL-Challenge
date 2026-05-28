@@ -20,4 +20,12 @@ insert into company_users values (1,1,'English')
 
 -- ## Find companies who have at least 2 users who speaks English and German both the languages
 
-select * from COMPANY_USERS;
+
+select COMPANY_ID, count(1) from 
+(select company_id, user_id, count(1) 
+from COMPANY_USERS
+where language in ('English', 'German')
+group by COMPANY_ID, user_id
+having count(1) = 2 ) a
+group by company_id having count(1) >= 2
+;
