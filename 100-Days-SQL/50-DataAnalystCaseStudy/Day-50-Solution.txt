@@ -1,0 +1,52 @@
+SOLUTION 1
+
+
+select u.segment, count(distinct u.user_id) as no_of_users
+,count(distinct case when b.line_of_business='Flight' and b.Booking_date between '2022-04-01' and '2022-04-30' then b.user_id end) as User_who_booked_flight_in_apr2022
+from user_table u
+left join booking_table b on u.User_id=b.User_id
+group by u.segment;
+
+
+SOLUTION 2
+
+
+Method 1
+
+select * from (
+select
+*,
+rank() over(partition by user_id order by booking_date) as rn
+from booking_table) a
+where rn=1 and Line_of_business='Hotel'
+;
+
+Method 2
+
+select distinct user_id from (
+select
+*,
+first_value(Line_of_business) over(partition by user_id order by booking_date) as first_booking
+from booking_table) A
+where first_booking='Hotel';
+
+
+
+SOLUTION 3
+
+select user_id,min(booking_date),max(booking_date),
+datediff(day,min(booking_date), max(booking_date)) as no_of_days
+from booking_table
+group by user_id;
+
+
+SOLUTION 4
+
+
+select segment
+,sum(case when Line_of_business='Flight' then 1 else 0 end) as flight_bookings
+,sum(case when Line_of_business='Hotel' then 1 else 0 end) as hotel_bookings
+from booking_table b
+inner join user_table u on b.user_id=u.user_id
+where datepart(year, booking_date)=2022
+group by segment;

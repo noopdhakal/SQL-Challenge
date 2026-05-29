@@ -67,3 +67,12 @@ rank() over (PARTITION by subject order by marks desc) as rank_desc
  ;
 
  --- Problem 4
+
+--  for each student and test, identify if their marks increased or decreased from the previous test
+
+
+select a.* ,
+case when marks > prev_marks then 'inc' else 'dec' end as statys from (
+select st.* , lag(marks, 1) over(partition by studentid order by testdate, subject) as prev_marks from STUDENTS st
+) a
+;
