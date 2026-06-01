@@ -13,6 +13,8 @@ values ('OUT','181868',13),('OUT','2159010',8)
 
 commit;
 
+select * from call_details;
+
 -- cte and filter clause
 
 with cte as
@@ -27,3 +29,41 @@ where out_duration is not null and inc_duration is not null and out_duration > i
 
 
 --using having clause
+
+with cte as
+(select call_number,
+sum(case when call_type in ('OUT') then CALL_DURATION else null end) as out_duration, 
+sum(case when call_type in ('INC') then CALL_DURATION else null end) as in_duration
+ from call_details
+ group by call_number)
+ select call_number from cte where out_duration is not null and in_duration is not null and out_duration > in_duration;
+ ;
+
+ -- Having condition 
+
+ select call_number from call_details 
+ group by call_number
+ having 
+ sum(case when call_type in ('OUT') then CALL_DURATION else null end) > 0 
+ and sum(case when call_type in ('INC') then CALL_DURATION else null end) > 0
+ and sum(case when call_type in ('OUT') then CALL_DURATION else null end) > sum(case when call_type in ('INC') then CALL_DURATION else null end);
+
+
+ --- Join condition 
+
+select * from call_details;
+ 
+ 
+ with cte_out as (
+
+    select call_number, sum(call_duration) as duration from call_details 
+    where call_type = 'OUT'
+    group by call_number 
+ ), cte_in as (
+select call_number, sum(call_duration) as duration from call_details 
+    where call_type = 'INC'
+    group by call_number 
+ )
+ select a.call_number from cte_in a inner join cte_out b on a.call_number = b.call_number
+ where a.duration < b.duration
+ ;
