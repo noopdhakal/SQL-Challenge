@@ -30,3 +30,11 @@ select * from grp_number where grp in
 (select grp from grp_number group by grp
  having count(1) >= 3)
 ;
+
+--practise
+with cte as
+(select  bm.*, row_number() over (order by VISIT_DATE) as rn, 
+id - row_number() over (order by visit_date) as grp
+ from STADIUM bm where NO_OF_PEOPLE > 100)
+select * from cte where grp in ( select grp from cte group by grp having count(1) >= 3) order by 1
+ ;

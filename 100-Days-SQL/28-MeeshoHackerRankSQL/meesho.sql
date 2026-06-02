@@ -24,3 +24,15 @@ select customer_id, budget, count(1) as no_of_products, LISTAGG(product_id,',') 
 left join running_cost rc on rc.r_cost < cb.budget
 group by customer_id, budget order by 1
 ;
+
+select * from products;
+
+select * from customer_budget;
+
+with running_cost as 
+(select p.*, sum(cost) over (order by cost asc) as r_cost from products p)
+select customer_id, budget, count(1) as no_of_products, LISTAGG(product_id,',') as list_of_products from customer_budget a left join running_cost b 
+on b.r_cost < a.BUDGET 
+group by customer_id, budget
+order by 1
+;

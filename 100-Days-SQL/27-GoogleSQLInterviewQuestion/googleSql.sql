@@ -20,6 +20,7 @@ insert into company_users values (1,1,'English')
 
 -- ## Find companies who have at least 2 users who speaks English and German both the languages
 
+select * from company_users;
 
 select COMPANY_ID, count(1) from 
 (select company_id, user_id, count(1) 

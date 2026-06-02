@@ -28,6 +28,7 @@ VALUES (TO_DATE('2020-04-01','YYYY-MM-DD'), 'Vibhor', 'Deepak',50);
 
 commit;
 
+-- Find the total number of messages exchanged between each person per day
 
 select sms_date, p1, p2, sum(sms_no) as total_sms from 
 (select sms_date,
@@ -37,3 +38,12 @@ sms_no
  from subscriber s)
  GROUP by sms_date, p1, p2
  ;
+
+select * from subscriber;
+
+with cte as 
+ (select sms_date, case when sender < receiver then sender else receiver end as p1,
+ case when sender > receiver then sender else receiver end as p2 , sms_no
+  from subscriber)
+  select sms_date, p1, p2, sum(sms_no) from cte group by sms_date, p1, p2
+  ;

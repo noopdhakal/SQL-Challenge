@@ -1,3 +1,4 @@
+drop table students;
 CREATE TABLE students(
     studentid NUMBER,
     studentname VARCHAR2(255),
@@ -29,10 +30,14 @@ insert into students values (2,'Max Ruin','Subject3',29,3,TO_DATE('2022-01-03','
 
 insert into students values (5,'John Mike','Subject3',98,2,TO_DATE('2022-11-02','YYYY-MM-DD'));
 
+commit;
+
 select * from STUDENTS;
 
 -- 1 sql query to get the list of students who scored above the average marks in each subject.
 
+
+select * from students;
 with avg_marks as 
 (select subject, avg(MARKS) as avg_marks from STUDENTS GROUP by subject)
 select distinct studentname from STUDENTS s 
@@ -70,6 +75,8 @@ rank() over (PARTITION by subject order by marks desc) as rank_desc
 
 --  for each student and test, identify if their marks increased or decreased from the previous test
 
+
+select * from students;
 
 select a.* ,
 case when marks > prev_marks then 'inc' else 'dec' end as statys from (

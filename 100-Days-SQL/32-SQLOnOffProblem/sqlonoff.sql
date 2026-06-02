@@ -18,6 +18,7 @@ sum(case when status='on' and prv_status='off' then 1 else 0 end) over(order by 
 from 
 (select a.*, lag(status, 1, STATUS) over (order by event_time asc) as prv_status
 from EVENT_STATUS a) A)
+
 select min(event_time) as login, 
 max(event_time) as logout, count(1) - 1 as on_count
 from groupk group by group_key 

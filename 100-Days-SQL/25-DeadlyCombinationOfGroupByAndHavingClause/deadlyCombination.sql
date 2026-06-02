@@ -1,3 +1,4 @@
+drop table exams;
 create table exams (student_id int, subject varchar(20), marks int);
 delete from exams;
 insert into exams values (1,'Chemistry',91),(1,'Physics',91)
@@ -5,6 +6,7 @@ insert into exams values (1,'Chemistry',91),(1,'Physics',91)
 ,(3,'Chemistry',80)
 ,(4,'Chemistry',71),(4,'Physics',54);
 
+select * from exams;
 
 select student_id from exams
 where subject in ('Chemistry', 'Physics')

@@ -36,4 +36,3 @@ rank() over (PARTITION by city order by days asc) - rank() over (PARTITION by ci
  select city from xxx group by city
  having count(distinct diff) = 1 and avg(diff) = 0 
 ;
-

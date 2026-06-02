@@ -25,3 +25,27 @@ select ct1.*, max(OCCUPANCY) over (PARTITION by row_id order by seat_id rows bet
 
  select cte2.* from cte2 inner join cte3 on cte2.row_id = cte3.row_id and cte2.seat_id between cte3.seat_id and cte3.seat_id + 3
 ;
+
+
+with cte1 as (
+select mo.*, substr(seat, 1, 1) as row_id, to_number(substr(seat, 2)) as seat_id  from movie mo), cte2 as
+(select cte1.*, max(occupancy) over (partition by row_id order by seat_id rows between current row and 3 following) as is_4empty, 
+ count(occupancy) over (partition by row_id order by seat_id rows between current row and 3 following) as count_1
+from cte1 cte1), cte3 as 
+(select * from cte2 where is_4empty = 0 and count_1 = 4)
+
+-- select * from cte3
+select * from cte2 inner join cte3 on cte2.row_id = cte3.row_id and cte2.seat_id between cte3.seat_id and cte3.seat_id + 3
+;
+
+with cte1 as 
+(select mo.*, substr(seat, 1, 1) as row_id, to_number(substr(seat, 2)) as seat_id from movie mo), cte2 as
+(select cte1.*, max(occupancy) over (partition by row_id order by seat_id rows between current row and 3 following) as is_4empty ,
+count(occupancy) over (partition by row_id order by seat_id rows between current row and 3 following) as count_4
+from cte1 cte1), cte3 as (
+       select * from cte2 where is_4empty = 0 and count_4 = 4
+)
+-- select * from cte3
+select * from cte2 inner join cte3 on cte2.row_id = cte3.row_id and cte2.seat_id between cte3.seat_id and cte3.seat_id + 3
+
+; 

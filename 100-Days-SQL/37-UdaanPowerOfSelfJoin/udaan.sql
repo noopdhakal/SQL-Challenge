@@ -15,6 +15,8 @@ SELECT * FROM dual;
 
 -- wherever null its new for that city
 
+
+
 with cte as (
 select EXTRACT(year from business_date) as bus_year, city_id from BUSINESS_CITY)
 select c1.bus_year, 
@@ -24,3 +26,8 @@ left join cte c2 on c1.bus_year > c2.bus_year and c1.city_id = c2.city_id
 group by c1.bus_year
 ;
 
+with cte as 
+(select extract(year from business_date) as bus_year, city_id from BUSINESS_CITY)
+select c1.bus_year, count(case when c2.city_id is null then c1.city_id end ) from cte c1 left join cte c2 on c1.bus_year > c2.bus_year and c1.city_id = c2.city_id
+group by c1.bus_year
+;

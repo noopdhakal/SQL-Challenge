@@ -41,3 +41,4 @@ row_number() over (partition by company order by salary) as rn
 where rn between total_cnt / 2 and  total_cnt/2 + 1 
 group by company
 ;
+

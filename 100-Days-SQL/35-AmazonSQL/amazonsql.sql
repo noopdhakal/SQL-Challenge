@@ -32,3 +32,14 @@ count(1) over (PARTITION by dep_id) as cnt
  from emp rn)
 select * from xxx where rn = 3 or (cnt < 3 and rn = cnt)
 ;
+
+select * from emp;
+
+with cte as
+(select emp_id, emp_name, salary, dep_id, dep_name,
+rank() over (PARTITION by dep_id order by salary desc) as rn,
+count(1) over (PARTITION by dep_id) as cnt
+ from emp)
+ 
+ select * from cte where rn = 3 or (cnt < 3 and rn = cnt)
+  ;
