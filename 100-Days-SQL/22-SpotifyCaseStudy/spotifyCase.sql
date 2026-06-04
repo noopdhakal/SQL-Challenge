@@ -15,6 +15,8 @@ INSERT INTO activity VALUES
 
 -- 1 either installed or purchase the app
 
+select * from activity;
+
 select   event_date, count(distinct user_id) from activity
 group by EVENT_DATE
 ;

@@ -13,3 +13,7 @@ where subject in ('Chemistry', 'Physics')
 group by student_id
 having count(distinct subject) = 2 and count(distinct marks) = 1 
 ;
+
+select * from exams;
+commit;
+

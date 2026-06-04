@@ -36,3 +36,12 @@ on b.r_cost < a.BUDGET
 group by customer_id, budget
 order by 1
 ;
+
+select * from products;
+select * from CUSTOMER_BUDGET;
+
+with cte as
+(select po.*, sum(cost) over (order by cost asc) as r_cost from products po)
+select customer_id, budget, count(1) as no_of_products,
+listagg(product_id, ',') as list_of_products
+ from customer_budget cb left join cte a on a.r_cost < cb.BUDGET group by customer_id, budget;

@@ -19,6 +19,8 @@ VALUES ('S1', 'Q1', 200),
 
 select * from STORES;
 
+
+select store, 'Q' || (10 - sum(substr(quarter, -1))) as missing_quarter from stores group by store;
 -- Quarters which is missing
 
 select store, 'Q' || cast(10-sum(to_number(SUBSTR(QUARTER, -1))) as varchar2(2)) as q_no  from stores group by store;
@@ -41,6 +43,7 @@ with cte (store, q_no) as (
 select q.store, q.q_no from q 
 left join stores s on q.store=s.store and q.q_no = s.quarter where s.store is null
 ;
+
 
 -- Third Method cross join method
 
