@@ -1,0 +1,17 @@
+with cte as (
+    select winning_team_id as team_id, 1 as points, goals_won from matches
+    union all
+    select losing_team_id, -1 as points, 0 as goals_won from matches
+),
+cte2 as (
+    select 
+        team_id,
+        SUM(points) as total_points,
+        SUM(goals_won) as total_goals_won
+    from cte
+    group by team_id
+)
+select *,
+       RANK() over(order by total_points desc, total_goals_won desc) as team_rank
+from cte2;
+

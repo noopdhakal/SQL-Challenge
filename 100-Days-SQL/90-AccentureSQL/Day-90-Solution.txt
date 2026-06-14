@@ -1,0 +1,22 @@
+SOLUTION 1
+
+
+with cte as (
+    select *
+    ,ASCII(email_id) as ascii_email
+    , rank() over(partition by email_id order by ASCII(email_id) desc) as rn
+    from employees
+)
+select * from cte where rn=1
+
+
+
+SOLUTION 2
+
+
+with cte as (
+    select *
+    , rank() over(partition by lower(email_id) order by ASCII(email_id) desc) as rn
+    from employees
+)
+select * from cte where rn=1

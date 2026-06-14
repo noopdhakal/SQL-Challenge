@@ -43,3 +43,8 @@ VALUES
     -- method 2
 
     select f.name, f.FAMILY_SIZE, c.name, c.MIN_SIZE, c.MAX_SIZE from FAMILIES f inner join countries c on f.family_size between c.min_size and c.max_size;
+
+    select max(cnt) from (
+     select f.name, count(*) as cnt from FAMILIES f inner join countries c on f.family_size between c.min_size and c.max_size
+     group by f.name)
+     ;
