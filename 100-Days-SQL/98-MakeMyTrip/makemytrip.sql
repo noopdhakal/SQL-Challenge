@@ -52,10 +52,60 @@ commit;
 select * from booking_table;
 select * from user_table;
 
+--1 
+-- select u.segment, count(distinct u.user_id) as total_users
+-- , count(case when b.BOOKING_DATE between date '2022-04-01' and date '2022-04-30' then  u.USER_ID else null end) as total_apr_users 
+--  from user_table u 
+-- left join booking_table b on u.user_id = b.user_id
+-- group by u.segment
+-- ;
 
-select u.segment, count(distinct u.user_id) as total_users
-, count(case when b.BOOKING_DATE between date '2022-04-01' and date '2022-04-30' then  u.USER_ID else null end) as total_apr_users 
- from user_table u 
+
+select u.segment , COUNT(distinct u.user_id) as total_users
+, count(distinct case when b.booking_date between date '2022-04-01' and date '2022-04-30' then u.user_id else null end) as total_apr_users
+from user_table u
 left join booking_table b on u.user_id = b.user_id
+group by u.segment;
+
+
+--3 write a query to identify users whose first booking was a hotel booking
+
+select * from (
+select bk.*, row_number() over (partition by user_id order by booking_date) as rn 
+from booking_table bk) where rn = 1 and line_of_business='Hotel';
+
+-- qn4 write a query to calculate the days between first and last booking of the user with user_id = 1
+
+select user_id -- min(booking_date) as first_booking, max(booking_date) as last_booking
+, max(booking_date) - min(booking_date) as no_of_days
+ from booking_table where user_id = 'u1'
+ group by user_id
+;
+
+--5 write a query to count the number of flight and hotel bookings in each of the user segments for the year 2022
+
+
+select u.segment,-- b.LINE_OF_BUSINESS, 
+sum(case when b.line_of_business='Flight' then 1 else 0 end) as no_of_flight_bookings,
+sum(case when b.line_of_business='Hotel' then 1 else 0 end) as no_of_hotel_bookings
+from user_table u
+inner join booking_table b on u.user_id = b.user_id
 group by u.segment
+;
+
+
+--2 Find for each segment, the user who made the earliest booking in April 2022, and also return how many total bookings that user made in
+-- April 2022
+
+-- output columns: segment, user_id, first_booking_date, total_bookings_in_april
+
+
+with cte as (
+select u.SEGMENT, b.*, row_number() over (partition by u.segment order by booking_date, booking_id) as rn 
+, count(*) over (partition by u.segment,u.user_id) as count_of_bookings
+from user_table u
+
+inner join booking_table b on u.user_id = b.user_id where
+b.booking_date between date '2022-04-01' and date '2022-04-30')
+select * from cte where rn = 1
 ;
