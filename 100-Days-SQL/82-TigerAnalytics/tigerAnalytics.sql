@@ -12,6 +12,8 @@ commit;
 
 -- Solution
 
+select * from family;
+
 with cte_adult as (
 select fm.*, row_number() over (order by person) as rn from family fm where type ='Adult'),
 cte_child as (
