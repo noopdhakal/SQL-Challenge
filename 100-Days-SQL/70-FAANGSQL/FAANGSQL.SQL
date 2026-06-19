@@ -32,22 +32,40 @@ SELECT * FROM dual;
 
 COMMIT;
 
-with cte as (
-select transaction_id,customer_id as seller_id,amount,tran_date
-,LEAD(customer_id,1) over(order by transaction_id) as buyer_id
-from transactions
+WITH cte AS (
+    SELECT
+        transaction_id,
+        customer_id AS seller_id,
+        amount,
+        tran_date,
+        LEAD(customer_id) OVER (ORDER BY transaction_id) AS buyer_id
+    FROM transactions
 ),
-cte_combinations as
-(select seller_id,buyer_id,COUNT(*) as no_of_transactions
-from cte
-where transaction_id % 2 = 1
-group by seller_id,buyer_id
+cte_combinations AS (
+    SELECT
+        seller_id,
+        buyer_id,
+        COUNT(*) AS no_of_transactions
+    FROM cte
+    WHERE MOD(transaction_id, 2) = 1
+    GROUP BY seller_id, buyer_id
 ),
-fraud_customers as (
-select seller_id as frauds from cte_combinations
-intersect
-select buyer_id from cte_combinations
+fraud_customers AS (
+    SELECT seller_id AS frauds
+    FROM cte_combinations
+    INTERSECT
+    SELECT buyer_id
+    FROM cte_combinations
 )
-select * from cte_combinations
-where seller_id not in (select frauds from fraud_customers)
-and buyer_id not in (select frauds from fraud_customers)
+SELECT c.*
+FROM cte_combinations c
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM fraud_customers f
+    WHERE f.frauds = c.seller_id
+)
+AND NOT EXISTS (
+    SELECT 1
+    FROM fraud_customers f
+    WHERE f.frauds = c.buyer_id
+);
