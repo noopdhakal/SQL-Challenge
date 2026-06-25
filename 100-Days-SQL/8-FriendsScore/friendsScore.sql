@@ -5,11 +5,9 @@ select * from friend;
 -- write a query to find personID, Name, number of friend, sum of marks of 
 -- a person who have friends with total score greater than 100
 
-with friends_number as 
-( select personid, name, score, b.fid as friend_id  from person a
-left join friend b on a.personID = b.pid order by 2)
-
-;
+-- with friends_number as 
+-- ( select personid, name, score, b.fid as friend_id  from person a
+-- left join friend b on a.personID = b.pid order by 2);
 
 select * from person;
 
